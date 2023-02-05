@@ -12,16 +12,11 @@
     <p style="color: red;">Los datos están mal. Por favor reviselos.</p>
     {% endif %}
 
-    <form action="{% url 'curso-formulario' %}" method="POST">
-    {% csrf_token %}
-        
-        <table>
-            {{ formulario_curso.as_table }}
-        </table>
-
-        <input type="submit" value="Enviar">
-
-    </form>
+    <form action="{% url 'buscar' %}" method="GET">
+        {% csrf_token %}
+            <input type="number" name="camada" id="camada">
+            <input type="submit" value="Buscar">
+        </form>
 </body>
 </html>
 
