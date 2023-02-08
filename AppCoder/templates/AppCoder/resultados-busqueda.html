@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de la busqueda</title>
+</head>
+<body>
+    <p>Estamos buscando la camada {{ camada }}</p>
+
+    {% if cursos %}
+
+    <ul>
+        {% for curso in cursos %}
+        <li> {{ curso.camada }}: {{ curso.nombre }} </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+</body>
+</html>
