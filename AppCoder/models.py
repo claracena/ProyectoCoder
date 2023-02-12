@@ -22,6 +22,9 @@ class Profesor(models.Model):
     email = models.EmailField()
     profesion = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.nombre + ' ' + self.apellido
+
     class Meta:
         verbose_name_plural = 'Profesores'
 
