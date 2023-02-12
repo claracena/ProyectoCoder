@@ -1,0 +1,29 @@
+{% extends 'AppCoder/padre.html' %}
+
+{% block titulo %}
+Inicio de sesión
+{% endblock %}
+
+{% block contenido %}
+<section class="mt-5 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% if mensaje %}
+                <p style="color: red;"><strong>{{ mensaje }}</strong></p>
+                {% endif %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+                <hr>
+                <p><a href="{% url 'registro' %}">Aún no es usuario?</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+
