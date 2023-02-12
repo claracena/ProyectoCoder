@@ -1,0 +1,31 @@
+{% extends 'AppCoder/padre.html' %}
+
+{% block titulo %}
+Formulario - Editar profesor
+{% endblock %}
+
+{% block contenido %}
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+                {% if mi_formulario.errors %}
+                <p style="color: red;">Los datos están mal. Por favor reviselos.</p>
+                {% endif %}
+
+                <form action="{% url 'editar-profesor' profesor_id %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <table>
+                        {{ mi_formulario.as_table }}
+                    </table>
+
+                    <input type="submit" value="Enviar">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

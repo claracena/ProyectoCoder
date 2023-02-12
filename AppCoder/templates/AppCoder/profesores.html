@@ -5,13 +5,19 @@ Profesores
 {% endblock %}
 
 {% block contenido %}
-<section class="features-icons bg-light">
+<section class="mt-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <!--Aquí va lo que cambia, y lo asociado a está vista :) -->
                 <h1>Profesores</h1>
-                <p>Acá va la info de los profesores</p>
+                <!-- <p>Acá va la info de los profesores</p> -->
+                <ul>
+                {% for profesor in profesores %}
+                    <li>{{ profesor.id }} - {{ profesor }} - <a href="{% url 'eliminar-profesor' profesor.id %}">Eliminar</a> <a href="{% url 'editar-profesor' profesor.id %}">Editar</a></li>
+                {% endfor %}
+                </ul>
+                <a href="{% url 'profesor-formulario' %}">Agregar un nuevo profesor</a>
             </div>
         </div>
     </div>
