@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Curso, Profesor
 from .forms import CursoFormulario, ProfesorFormulario, MyUserCreationForm
@@ -108,7 +109,7 @@ def editar_profesor(request, profesor_id):
         contexto = {'mi_formulario': mi_formulario, 'profesor_id': profesor.id}
         return render(request, 'AppCoder/editar-profesor.html', contexto)
 
-class CursoList(ListView):
+class CursoList(LoginRequiredMixin, ListView):
 
     model = Curso
     template_name = 'AppCoder/cursos-list.html'
@@ -152,7 +153,8 @@ def login_request(request):
 
             if user is not None:
                 login(request, user)
-                return render(request, 'AppCoder/cursos-list.html', {'mensaje': f'Bienvenido {usuario}'})
+                return redirect('inicio')
+                # return render(request, 'AppCoder/cursos-list.html', {'mensaje': f'Bienvenido {usuario}'})
             else:
                 return render(request, 'AppCoder/login.html', {'mensaje': 'Error, datos incorrectos', 'form': form})
         else:
