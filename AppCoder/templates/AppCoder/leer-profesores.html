@@ -14,10 +14,18 @@ Profesores
                 <p>
                     <ul>
                     {% for profesor in profesores %}
-                        <li>{{ profesor }}</li>
+                        <li>{{ profesor }} - <a href="{% url 'eliminar-profesor' profesor.id %}">Eliminar</a> <a href="{% url 'editar-profesor' profesor.id %}">Editar</a></li>
                     {% endfor %}
                     </ul>
                 </p>
+                {% if mi_formulario %}
+                <hr>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ mi_formulario.as_p }}
+                    <input type="submit" value="Guardar cambios">
+                </form>
+                {% endif %}
             </div>
         </div>
     </div>

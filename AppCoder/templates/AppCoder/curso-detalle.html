@@ -1,7 +1,7 @@
 {% extends 'AppCoder/padre.html' %}
 
 {% block titulo %}
-Profesores
+Bienvenido a mi sitio de Coder
 {% endblock %}
 
 {% block contenido %}
@@ -9,14 +9,11 @@ Profesores
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <!--Aquí va lo que cambia, y lo asociado a está vista :) -->
-                <h1>Profesores</h1>
+                <h1>Curso Detalle</h1>
+                <p>Nombre: {{ curso.nombre }}</p>
+                <p>Camada: {{ curso.camada }}</p>
                 <p>
-                    <ul>
-                    {% for profesor in profesores %}
-                        <li>{{ profesor }}</li>
-                    {% endfor %}
-                    </ul>
+                    <a href="{% url 'inicio' %}">Regresar</a>
                 </p>
             </div>
         </div>

@@ -1,8 +1,42 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse, reverse_lazy
 
 from .models import Curso, Profesor
 from .forms import CursoFormulario, ProfesorFormulario
+
+class CursoList(ListView):
+
+    model = Curso
+    template_name = 'AppCoder/cursos-list.html'
+
+class CursoDetalle(DetailView):
+
+    model = Curso
+    template_name = 'AppCoder/curso-detalle.html'
+
+class CursoCreacion(CreateView):
+
+    model = Curso
+    template_name = 'AppCoder/curso-nuevo.html'
+    success_url = reverse_lazy('inicio')
+    fields = ['nombre', 'camada']
+
+class CursoUpdate(UpdateView):
+
+    model = Curso
+    template_name = 'AppCoder/curso-nuevo.html'
+    success_url = reverse_lazy('inicio')
+    fields = ['nombre', 'camada']
+
+class CursoDelete(DeleteView):
+
+    model = Curso
+    template_name = 'AppCoder/curso-eliminar.html'
+    success_url = reverse_lazy('inicio')
 
 def inicio(request):
     return render(request, 'AppCoder/inicio.html')
@@ -86,3 +120,46 @@ def buscar(request):
     respuesta = 'No se encontro esa camada'
     return HttpResponse(respuesta)
 
+def leer_profesores(request):
+    profesores = Profesor.objects.all()
+    contexto = {'profesores': profesores}
+    return render(request, 'AppCoder/leer-profesores.html', contexto)
+
+def eliminar_profesor(request, profesor_id):
+    profesor = Profesor.objects.get(id=profesor_id)
+    profesor.delete()
+
+    profesores = Profesor.objects.all()
+
+    contexto = {'profesores': profesores}
+
+    return render(request, 'AppCoder/leer-profesores.html', contexto)
+
+def editar_profesor(request, profesor_id):
+    profesor = Profesor.objects.get(id=profesor_id)
+
+    if request.method == 'POST':
+        mi_formulario = ProfesorFormulario(request.POST)
+
+        if mi_formulario.is_valid():
+            informacion = mi_formulario.cleaned_data
+
+            profesor.nombre = informacion['nombre']
+            profesor.apellido = informacion['apellido']
+            profesor.email = informacion['email']
+            profesor.profesion = informacion['profesion']
+
+            profesor.save()
+
+            profesores = Profesor.objects.all()
+            contexto = {'profesores': profesores}
+
+            return render(request, 'AppCoder/leer-profesores.html', contexto)
+
+    else:
+        mi_formulario = ProfesorFormulario(initial={'nombre': profesor.nombre, 'apellido': profesor.apellido, 'email': profesor.email, 'profesion': profesor.profesion})
+
+        profesores = Profesor.objects.all()
+        contexto = {'mi_formulario': mi_formulario, 'profesor_id': profesor_id, 'profesores': profesores}
+
+        return render(request, 'AppCoder/leer-profesores.html', contexto)
