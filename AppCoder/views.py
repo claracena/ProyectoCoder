@@ -4,9 +4,12 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Curso, Profesor
-from .forms import CursoFormulario, ProfesorFormulario
+from .forms import CursoFormulario, ProfesorFormulario, MyUserCreationForm
 
 def inicio(request):
     return render(request, 'AppCoder/inicio.html')
@@ -116,22 +119,66 @@ class CursoDetalle(DetailView):
     model = Curso
     template_name = 'AppCoder/curso-detalle.html'
 
-class CursoCreacion(CreateView):
+class CursoCreacion(LoginRequiredMixin, CreateView):
 
     model = Curso
     template_name = 'AppCoder/curso-nuevo.html'
     success_url = reverse_lazy('inicio')
     fields = ['nombre', 'camada']
 
-class CursoUpdate(UpdateView):
+class CursoUpdate(LoginRequiredMixin, UpdateView):
 
+    login_url = 'login/'
     model = Curso
     template_name = 'AppCoder/curso-nuevo.html'
     success_url = reverse_lazy('inicio')
     fields = ['nombre', 'camada']
 
-class CursoDelete(DeleteView):
+class CursoDelete(LoginRequiredMixin, DeleteView):
 
     model = Curso
     template_name = 'AppCoder/curso-eliminar.html'
     success_url = reverse_lazy('inicio')
+
+def login_request(request):
+    form = AuthenticationForm()
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+
+        if form.is_valid():
+            usuario = form.cleaned_data.get('username')
+            cont = form.cleaned_data.get('password')
+
+            user = authenticate(username=usuario, password=cont)
+
+            if user is not None:
+                login(request, user)
+                contexto = {'mensaje': f'Bienvenido {usuario}'}
+                return render(request, 'AppCoder/inicio.html', contexto)
+            else:
+                contexto = {'mensaje': f'El usuario no existe', 'form': form}
+                return render(request, 'AppCoder/login.html', contexto)
+        else:
+            contexto = {'mensaje': f'Los datos son erroneos', 'form': form}
+            return render(request, 'AppCoder/login.html', contexto)
+    
+    contexto = {'form': form}
+    return render(request, 'AppCoder/login.html', contexto)
+
+def register(request):
+    if request.method == 'POST':
+        # form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            contexto = {'mensaje': 'Usuario creado satisfactoriamente'}
+            return render(request, 'AppCoder/inicio.html', contexto)
+    else:
+        # form = UserCreationForm()
+        form = MyUserCreationForm()
+        contexto = {'form': form}
+        return render(request, 'AppCoder/registro.html', contexto)
+
+
