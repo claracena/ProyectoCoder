@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 from .models import Curso, Profesor
 from .forms import CursoFormulario, ProfesorFormulario, MyUserCreationForm
@@ -20,6 +21,7 @@ def cursos(request):
 # def profesores(request):
 #     return render(request, 'AppCoder/profesores.html')
 
+@login_required()
 def estudiantes(request):
     return render(request, 'AppCoder/estudiantes.html')
 
@@ -109,7 +111,7 @@ def editar_profesor(request, profesor_id):
         contexto = {'mi_formulario': mi_formulario, 'profesor_id': profesor.id}
         return render(request, 'AppCoder/editar-profesor.html', contexto)
 
-class CursoList(LoginRequiredMixin, ListView):
+class CursoList(ListView):
 
     model = Curso
     template_name = 'AppCoder/cursos-list.html'
@@ -119,21 +121,21 @@ class CursoDetalle(DetailView):
     model = Curso
     template_name = 'AppCoder/curso-detalle.html'
 
-class CursoCreacion(CreateView):
+class CursoCreacion(LoginRequiredMixin, CreateView):
 
     model = Curso
     template_name = 'AppCoder/curso-nuevo.html'
     success_url = reverse_lazy('inicio')
     fields = ['nombre', 'camada']
 
-class CursoUpdate(UpdateView):
+class CursoUpdate(LoginRequiredMixin, UpdateView):
 
     model = Curso
     template_name = 'AppCoder/curso-nuevo.html'
     success_url = reverse_lazy('inicio')
     fields = ['nombre', 'camada']
 
-class CursoDelete(DeleteView):
+class CursoDelete(LoginRequiredMixin, DeleteView):
 
     model = Curso
     template_name = 'AppCoder/curso-eliminar.html'
