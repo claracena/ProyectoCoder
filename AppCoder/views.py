@@ -177,5 +177,6 @@ def register(request):
     else:
         # form = UserCreationForm()
         form = MyUserCreationForm()
-
+ 
     return render(request, 'AppCoder/registro.html', {'form': form})
+
