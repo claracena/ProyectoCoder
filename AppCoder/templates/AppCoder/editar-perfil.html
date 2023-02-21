@@ -1,0 +1,27 @@
+{% extends 'AppCoder/padre.html' %}
+
+{% block titulo %}
+Editar Perfil
+{% endblock %}
+
+{% block contenido %}
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                
+                <h1>Formulario - Editar Perfil</h1>
+                <h3>Usuario: {{ usuario }}</h3>
+
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ mi_formulario.as_p }}
+                    <input type="submit" value="Editar">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

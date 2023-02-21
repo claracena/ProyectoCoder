@@ -1,0 +1,28 @@
+{% extends 'AppCoder/padre.html' %}
+
+{% block titulo %}
+Agregar Avatar
+{% endblock %}
+
+{% block contenido %}
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                
+                <h3>Agregar Avatar</h3>
+
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ mi_formulario.as_p }}
+                    <input type="submit" value="Editar">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+

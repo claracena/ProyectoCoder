@@ -7,9 +7,11 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
-from .models import Curso, Profesor
-from .forms import CursoFormulario, ProfesorFormulario, MyUserCreationForm
+from .models import Curso, Profesor, Avatar
+from .forms import CursoFormulario, ProfesorFormulario, MyUserCreationForm, UserEditForm, AvatarFormulario
 
 def inicio(request):
     return render(request, 'AppCoder/inicio.html')
@@ -181,4 +183,45 @@ def register(request):
         contexto = {'form': form}
         return render(request, 'AppCoder/registro.html', contexto)
 
+@login_required
+def editar_perfil(request):
+    usuario = User.objects.get(username=request.user)
+    usuario_imagen = Avatar
+
+    if request.method == 'POST':
+        mi_formulario = UserEditForm(request.POST, instance=request.user)
+
+        if mi_formulario.is_valid():
+            informacion = mi_formulario.cleaned_data
+
+            usuario.username = informacion['username']
+            usuario.email = informacion['email']
+            usuario.password1 = informacion['password1']
+            usuario.password2 = informacion['password2']
+            usuario.last_name = informacion['last_name']
+            usuario.first_name = informacion['first_name']
+            usuario.imagen = informacion['imagen']
+
+            usuario.save()
+
+            return redirect('/')
+
+    else:
+        mi_formulario = UserEditForm(instance=request.user)
+
+    return render(request, "AppCoder/editar-perfil.html", {"mi_formulario": mi_formulario, "usuario": usuario})
+
+@login_required
+def agregar_avatar(request):
+    avatar = request.user.avatar
+    mi_formulario = AvatarFormulario(instance=avatar)
+
+    if request.method == 'POST':
+        mi_formulario = AvatarFormulario(request.POST, request.FILES, instance=avatar)
+        if mi_formulario.is_valid():
+            mi_formulario.save()
+            return render(request, 'AppCoder/inicio.html')
+
+    else:
+        return render(request, "AppCoder/agregar-avatar.html", {"mi_formulario": mi_formulario})
 

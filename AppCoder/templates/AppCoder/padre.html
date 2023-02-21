@@ -26,7 +26,11 @@
                 <a href="{% url 'inicio' %}">Estudiantes</a>
                 <a href="{% url 'inicio' %}">Entregables</a>
                 {% if user.is_authenticated %}
-                <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+                <p class="navbar-brand" style="margin-top: 1rem; margin-bottom: 1rem;">
+                    Hola {{ user.username }}
+                    <img src="{{ user.avatar.imagen.url }}" class="rounded-circle" height="40px" alt="{{ user.username }}" style="margin-right: 1rem;">
+                    <a href="{% url 'logout' %}">Salir</a>
+                </p>
                 {% else %}
                 <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
                 {% endif %}
