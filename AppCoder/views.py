@@ -209,3 +209,11 @@ def editar_perfil(request):
                                     'first_name': usuario.first_name})
 
     return render(request, 'AppCoder/editar-perfil.html', {'mi_formulario': mi_formulario})
+
+@login_required
+def agregar_avatar(request):
+    avatar = request.user.avatar
+    mi_formulario = AvatarFormulario(instance=avatar)
+
+    if request.method == 'POST':
+        mi_formulario = AvatarFormulario(request.POST, )
