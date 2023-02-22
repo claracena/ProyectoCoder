@@ -27,4 +27,16 @@ class MyUserCreationForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
         help_texts = {k: '' for k in fields}
 
+class UserEditForm(forms.Form):
 
+    username = forms.CharField(label='Nombre de usuario')
+    email = forms.EmailField(label='Email')
+    first_name = forms.CharField(label='Nombre')
+    last_name = forms.CharField(label='Apellido')
+
+    class Meta:
+
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+        # exclude = ['password1', 'password2']
+        help_texts = {k: '' for k in fields}

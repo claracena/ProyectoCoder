@@ -24,4 +24,5 @@ urlpatterns = [
     path('login/', login_request, name='login'),
     path('registro/', register, name='registro'),
     path('logout/', LogoutView.as_view(template_name='AppCoder/logout.html'), name='logout'),
+    path('editar-perfil/', editar_perfil, name='editar-perfil'),
 ]
