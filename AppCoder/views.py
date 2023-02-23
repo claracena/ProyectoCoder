@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from .models import Curso, Profesor
-from .forms import CursoFormulario, ProfesorFormulario, MyUserCreationForm, UserEditForm
+from .forms import CursoFormulario, ProfesorFormulario, MyUserCreationForm, UserEditForm, AvatarFormulario
 
 def inicio(request):
     return render(request, 'AppCoder/inicio.html')
@@ -216,4 +216,12 @@ def agregar_avatar(request):
     mi_formulario = AvatarFormulario(instance=avatar)
 
     if request.method == 'POST':
-        mi_formulario = AvatarFormulario(request.POST, )
+        mi_formulario = AvatarFormulario(request.POST, request.FILES, instance=avatar)
+        if mi_formulario.is_valid():
+            mi_formulario.save()
+
+            return redirect('/')
+
+    else:
+        return render(request, 'AppCoder/agregar-avatar.html', {'mi_formulario': mi_formulario})
+
